@@ -1,0 +1,119 @@
+<resources>
+    <string name="app_name">PetCare</string>
+    <string name="large_text">large_text</string>
+
+    --home_activity--
+    <string name="timkiem">Search</string>
+    <string name="tab_1">Home</string>
+    <string name="tab_2">Veterinary</string>
+    <string name="tab_3">Chat</string>
+    <string name="tab_4">Adopt</string>
+    <string name="tab_5">Profile</string>
+
+    --start_app---
+    <string name="title">PET CARE</string>
+    <string name="findPet">Find pet\'s new family </string>
+    <string name="signin">Sign In </string>
+    <string name="signup">Sign Up</string>
+    <string name="member">Already a member?</string>
+
+    --sign_in----
+    <string name="User">Email</string>
+    <string name="pass">Password</string>
+    <string name="well">Welcome to the</string>
+    <string name="signupfor">Sign Up for Pet Care</string>
+    <string name="forgot">Forgot you password?</string>
+
+    --sign_up--
+    <string name="already">Already have an account?</string>
+    <string name="passcf">Confirm password</string>
+
+    --signUpActivity--
+    <string name="email">Your email</string>
+    <string name="passnull">Enter pass</string>
+    <string name="passequa">password is not correct</string>
+    <string name="success">Sign Up Success</string>
+    <string name="pross">Processing</string>
+
+    --fragment_profile---
+    <string name="profile">Profile</string>
+    <string name="user">Username</string>
+    <string name="welcome">Welcome my profile</string>
+
+    --item_status--
+    <string name="like">Like</string>
+    <string name="cmt">Comment</string>
+
+    --customdialog---
+    <string name="Ok">Ok</string>
+    <string name="Change">Change username</string>
+    <string name="cancel">Cancel</string>
+
+    --custom_change-pass--
+    <string name="changepass">Change Password</string>
+    <string name="passold">Old password</string>
+    <string name="passnew">New password</string>
+
+    --activity_mess--
+    <string name="type">Type a message...</string>
+
+    --user_list---
+    <string name="search">Search</string>
+
+    --chat_item_right--
+    <string name="seen">Seen</string>
+
+    --dialog_dang_bai---
+    <string name="post">Post</string>
+    <string name="create">Create Post</string>
+    <string name="diltitle">Title</string>
+    <string name="share">Share your pet</string>
+
+    --activity_post---
+    <string name="write"> Write a public comment...</string>
+    <string name="postExist"> The post does not exist</string>
+
+    --menuyus--
+    <string name="delete">Delete</string>
+    <string name="edit">Edit post</string>
+
+    --edit_post---
+    <string name="save">Save</string>
+
+    --item_cmt---
+    <string name="editt">Edit</string>
+
+    --help---
+    <string name="help">Help Center</string>
+    <string name="hello">Hello! What can we do for you?</string>
+    <string name="questions">Questions you can ask</string>
+    <string name="i">I can\'t reply to messages on PetCare.</string>
+    <string name="howPost">How do I post on PetCare?</string>
+    <string name="howReport">How do I report a problem?</string>
+
+    --change_email---
+    <string name="changeem">Change email</string>
+
+    --reset_pass--
+    <string name="reset">Reset</string>
+    <string name="send">By clicking Reset,
+        you will receive an email to reset your password</string>
+
+    --quangcao_recyc---
+    <string name="dichi">Địa chỉ: </string>
+    <string name="sdt">Sđt: </string>
+    <string name="web">Website: </string>
+    <string name="tg">Thời gian hoạt động: </string>
+
+    --chitiet--
+    <string name="thong">Thông tin liên hệ:</string>
+    <string name="hinh">Hình ảnh cơ sở thú y</string>
+
+    --check_internet---
+    <string name="op">OOPS!</string>
+    <string name="no">No Internet connection</string>
+    <string name="pl">Please check your connection</string>
+    <string name="retry">Retry</string>
+    <string name="title_activity_maps">MapsActivity</string>
+
+</resources>

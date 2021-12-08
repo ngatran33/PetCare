@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:padding="10dp"
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/item_cmtImgAvt"
+            android:layout_marginTop="10dp"
+            android:src="@mipmap/ic_launcher"/>
+
+    <RelativeLayout
+        android:id="@+id/cmt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@id/item_cmtImgAvt"
+        android:background="@drawable/border_tron"
+        android:backgroundTint="@color/purple_200"
+        android:orientation="vertical"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="10dp">
+
+        <TextView
+            android:id="@+id/item_cmtTvUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/user"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/item_cmtTvCmt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/item_cmtTvUsername"
+            android:textColor="@color/black"
+            android:textSize="25sp" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/item_cmtDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cmt"
+        android:layout_marginLeft="40dp"
+        android:layout_toRightOf="@id/item_cmtImgAvt"
+        android:text="@string/delete" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/item_cmtEdit"
+        android:text="@string/editt"
+        android:layout_toRightOf="@id/item_cmtDelete"
+        android:layout_below="@id/cmt"
+        android:layout_marginLeft="20dp"/>
+</RelativeLayout>

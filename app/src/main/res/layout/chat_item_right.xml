@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:padding="8dp"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="300dp"
+        android:layout_alignParentEnd="true"
+        android:layout_height="wrap_content">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imgAvt"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/TvMess"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/imgAvt"
+            android:background="@drawable/bgr_left"
+            android:padding="8dp"
+            android:backgroundTint="@color/blue"
+            android:text="hello"
+            android:textSize="20sp" />
+    </RelativeLayout>
+
+</RelativeLayout>

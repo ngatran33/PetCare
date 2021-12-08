@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/gray"
+        android:layout_height="match_parent">
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/messBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/messToolBar"
+                android:background="@color/pink_"
+                android:navigationIcon="@drawable/ic_baseline_keyboard_backspace_24">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:id="@+id/messAvt"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/messUser"
+                    android:textSize="20sp"
+                    android:textColor="@color/white"
+                    android:layout_marginLeft="25sp"/>
+            </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/messBarLayout"
+            android:layout_above="@id/messSend"
+            android:id="@+id/messRecyc"/>
+
+
+        <RelativeLayout
+            android:id="@+id/messSend"
+            android:layout_width="match_parent"
+            android:padding="5dp"
+            android:background="@color/white"
+            android:layout_alignParentBottom="true"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/messEtSend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:hint="@string/type"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@id/messBtnsend" />
+
+            <ImageButton
+                android:id="@+id/messBtnsend"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/ic_baseline_send_24" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+</layout>

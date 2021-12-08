@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="20dp"
+    android:layout_height="match_parent">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/img"
+        android:src="@drawable/ic_baseline_wifi_off_24"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/op"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        android:id="@+id/op"
+        android:textStyle="bold"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no"
+        android:textSize="25sp"
+        android:textColor="@color/black"
+        android:id="@+id/inter"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pl"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:id="@+id/check"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="retry"
+        android:textAllCaps="false"
+        android:background="@drawable/border_tron"
+        android:backgroundTint="@color/blue"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        android:id="@+id/retry"
+        android:layout_margin="20dp"/>
+
+</LinearLayout>
