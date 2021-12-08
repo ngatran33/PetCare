@@ -35,39 +35,40 @@ public class QuangCaoFragment extends Fragment {
     Runnable runnable;
     Handler handler;
     int current;
-    DatabaseReference reference= FirebaseDatabase.getInstance().getReference();
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        view=inflater.inflate(R.layout.fragment_quang_cao, container, false);
+        view = inflater.inflate(R.layout.fragment_quang_cao, container, false);
         anhxa();
         getData();
         return view;
     }
 
     private void getData() {
-        quangCaoList=new ArrayList<>();
+        quangCaoList = new ArrayList<>();
         reference.child("veterinarys").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 quangCaoList.clear();
-                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
-                    ThuY quangCao=dataSnapshot.getValue(ThuY.class);
-                    quangCaoList.add(quangCao);
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    ThuY thuY = dataSnapshot.getValue(ThuY.class);
+                    quangCaoList.add(thuY);
                 }
-                adapter=new BannerAdapter(getContext(),quangCaoList);
+                adapter = new BannerAdapter(getContext(), quangCaoList);
                 viewPager.setAdapter(adapter);
                 circleIndicator.setViewPager(viewPager);
-                handler=new Handler();
-                runnable=new Runnable() {
+                handler = new Handler();
+                runnable = new Runnable() {
                     @Override
                     public void run() {
-                        current=viewPager.getCurrentItem();
+                        current = viewPager.getCurrentItem();
                         current++;
-                        if(current>=3){
-                            current=0;
+                        if (current >= 3) {
+                            current = 0;
                         }
                         viewPager.setCurrentItem(current, true);
                         handler.postDelayed(runnable, 4500);
@@ -84,8 +85,8 @@ public class QuangCaoFragment extends Fragment {
     }
 
     private void anhxa() {
-        viewPager=view.findViewById(R.id.viewPager);
-        circleIndicator=view.findViewById(R.id.indicatorDefault);
+        viewPager = view.findViewById(R.id.viewPager);
+        circleIndicator = view.findViewById(R.id.indicatorDefault);
     }
 
 }

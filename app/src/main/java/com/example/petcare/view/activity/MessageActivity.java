@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.petcare.R;
-import com.example.petcare.adapter.Util;
 import com.example.petcare.databinding.ActivityMessageBinding;
 import com.example.petcare.model.Chats;
 import com.example.petcare.model.User;
@@ -31,7 +30,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class MessageActivity extends AppCompatActivity {
@@ -43,24 +41,24 @@ public class MessageActivity extends AppCompatActivity {
     DatabaseReference reference;
     MessageAdapter adapter;
     List<Chats> chatsList;
-    NetworkChangeListener networkChangeListener=new NetworkChangeListener();
+    NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding= DataBindingUtil.setContentView(this, R.layout.activity_message);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_message);
 
-        intent=getIntent();
-        String userID=intent.getStringExtra("userId");
+        intent = getIntent();
+        String userID = intent.getStringExtra("userId");
 
 
-        firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
-        reference= FirebaseDatabase.getInstance().getReference("users").child(userID);
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        reference = FirebaseDatabase.getInstance().getReference("users").child(userID);
 
 
         binding.messRecyc.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getApplicationContext(),RecyclerView.VERTICAL, false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
         linearLayoutManager.setStackFromEnd(true);
         binding.messRecyc.setLayoutManager(linearLayoutManager);
 
@@ -75,17 +73,13 @@ public class MessageActivity extends AppCompatActivity {
         });
 
 
-
-
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                User user=snapshot.getValue(User.class);
+                User user = snapshot.getValue(User.class);
+                assert user != null;
                 binding.messUser.setText(user.getUsername());
-                if(user.getAvt().equals("default")){
-                    binding.messAvt.setImageResource(R.drawable.users);
-                }else
-                    Glide.with(getApplicationContext()).load(user.getAvt()).into(binding.messAvt);
+                Glide.with(getApplicationContext()).load(user.getAvt()).error(R.drawable.users).into(binding.messAvt);
                 readMessages(firebaseUser.getUid(), userID, user.getAvt());
 
             }
@@ -98,37 +92,38 @@ public class MessageActivity extends AppCompatActivity {
         binding.messBtnsend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String message=binding.messEtSend.getText().toString();
-                if(!message.equals("")){
+                String message = binding.messEtSend.getText().toString();
+                if (!message.equals("")) {
                     sendMessage(firebaseUser.getUid(), userID, message);
-                }else {
+                } else {
                     Toast.makeText(getBaseContext(), "You can't send empty message", Toast.LENGTH_LONG).show();
                 }
                 binding.messEtSend.setText("");
             }
         });
     }
-    private  void sendMessage(String sender, String receiver, String message){
-        DatabaseReference reference1=FirebaseDatabase.getInstance().getReference();
-        Chats chats=new Chats(sender, receiver, message);
+
+    private void sendMessage(String sender, String receiver, String message) {
+        DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference();
+        Chats chats = new Chats(sender, receiver, message);
         reference1.child("Chats").push().setValue(chats);
 
     }
 
-    private  void readMessages(final String myId,final String userId, String imgAvt){
-        chatsList=new ArrayList<>();
-        reference= FirebaseDatabase.getInstance().getReference("Chats");
+    private void readMessages(final String myId, final String userId, String imgAvt) {
+        chatsList = new ArrayList<>();
+        reference = FirebaseDatabase.getInstance().getReference("Chats");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 chatsList.clear();
-                for(DataSnapshot dataSnapshot: snapshot.getChildren()){
-                    Chats chats= dataSnapshot.getValue(Chats.class);
-                    if((chats.getReceiver().equals(myId) && chats.getSender().equals(userId))
-                    ||(chats.getReceiver().equals(userId) && chats.getSender().equals(myId))){
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Chats chats = dataSnapshot.getValue(Chats.class);
+                    if ((chats.getReceiver().equals(myId) && chats.getSender().equals(userId))
+                            || (chats.getReceiver().equals(userId) && chats.getSender().equals(myId))) {
                         chatsList.add(chats);
                     }
-                    adapter=new MessageAdapter(MessageActivity.this, chatsList, imgAvt);
+                    adapter = new MessageAdapter(MessageActivity.this, chatsList, imgAvt);
                     binding.messRecyc.setAdapter(adapter);
                 }
 
@@ -141,29 +136,9 @@ public class MessageActivity extends AppCompatActivity {
         });
     }
 
-    private void status(String status){
-        reference= FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid());
-
-        HashMap<String, Object> map=new HashMap<>();
-        map.put("status", status);
-
-        reference.updateChildren(map);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        status("online");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        status("offline");
-    }
     @Override
     protected void onStart() {
-        IntentFilter filter=new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(networkChangeListener, filter);
         super.onStart();
     }

@@ -8,10 +8,8 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import com.example.petcare.R;
-import com.example.petcare.adapter.Util;
 import com.example.petcare.databinding.ActivityStartAppBinding;
 import com.example.petcare.presenter.NetworkChangeListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,23 +19,24 @@ public class StartAppActivity extends AppCompatActivity {
 
     ActivityStartAppBinding binding;
     FirebaseUser firebaseUser;
-    NetworkChangeListener networkChangeListener=new NetworkChangeListener();
+    NetworkChangeListener networkChangeListener = new NetworkChangeListener();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding= DataBindingUtil.setContentView(StartAppActivity.this, R.layout.activity_start_app);
-        firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
+        binding = DataBindingUtil.setContentView(StartAppActivity.this, R.layout.activity_start_app);
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
 
-        if(firebaseUser!=null){
-            Intent intent=new Intent(getBaseContext(),HomeActivity.class);
+        if (firebaseUser != null) {
+            Intent intent = new Intent(getBaseContext(), HomeActivity.class);
             startActivity(intent);
         }
 
         binding.appBtnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getBaseContext(),SignInActivity.class);
+                Intent intent = new Intent(getBaseContext(), SignInActivity.class);
                 startActivity(intent);
             }
         });
@@ -45,14 +44,15 @@ public class StartAppActivity extends AppCompatActivity {
         binding.appTvSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getBaseContext(),SignUpActivity.class);
+                Intent intent = new Intent(getBaseContext(), SignUpActivity.class);
                 startActivity(intent);
             }
         });
     }
+
     @Override
     protected void onStart() {
-        IntentFilter filter=new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(networkChangeListener, filter);
         super.onStart();
     }

@@ -102,7 +102,6 @@ public class PresenterChat {
     public void readUsers(String s) {
         List<User> userList=new ArrayList<>();
         firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
-//        firebaseUser.getPhotoUrl();
         reference= FirebaseDatabase.getInstance().getReference("users");
 
         reference.addValueEventListener(new ValueEventListener() {

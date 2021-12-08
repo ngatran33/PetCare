@@ -6,16 +6,17 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.example.petcare.R;
 import com.example.petcare.adapter.AdapterTus;
-import com.example.petcare.adapter.Util;
 import com.example.petcare.databinding.ActivitySearchBinding;
 import com.example.petcare.model.Status;
 import com.example.petcare.presenter.NetworkChangeListener;
@@ -32,7 +33,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -41,7 +41,7 @@ public class SearchActivity extends AppCompatActivity {
     FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     List<String> stringList = new ArrayList<>();
     AdapterTus adapterTus;
-    NetworkChangeListener networkChangeListener=new NetworkChangeListener();
+    NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,11 +80,16 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 tim();
-
+                hideKeyboard();
             }
         });
 
 
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager inputMethodManager= (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(),0);
     }
 
     private void tim() {
@@ -110,7 +115,7 @@ public class SearchActivity extends AppCompatActivity {
                     if (statusList.size() == 0) {
                         binding.searchTb.setVisibility(View.VISIBLE);
                         binding.searchTb.setText("No results were found");
-                  } else {
+                    } else {
                         binding.searchTb.setVisibility(View.GONE);
                     }
                     Collections.sort(statusList);
@@ -196,9 +201,10 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
     }
+
     @Override
     protected void onStart() {
-        IntentFilter filter=new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(networkChangeListener, filter);
         super.onStart();
     }

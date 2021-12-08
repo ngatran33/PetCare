@@ -154,7 +154,7 @@ public class PresenterProfile {
                 }
             });
         } else {
-            itf.toast("Old password same new password");
+            itf.toast("Old userName same new userName");
         }
         return true;
     }

@@ -55,9 +55,13 @@ public class PresenterEditPost {
         }
     }
 
-    public void save(String loai, String mota, boolean flag, Uri mUri, String idPost, String uri, String date) {//loai.getText().toString(), mota.getText().toString()
-
-        Status status = new Status(idPost, uri, loai, mota, firebaseUser.getUid(), date);
+    public void save(String loai, String mota, boolean flag, Uri mUri, String idPost, String uri, String date, boolean flag1) {//loai.getText().toString(), mota.getText().toString()
+        Status status;
+        if(!flag1){
+            status = new Status(idPost, "default", loai, mota, firebaseUser.getUid(), date);
+        }else {
+            status = new Status(idPost, uri, loai, mota, firebaseUser.getUid(), date);
+        }
         if (loai.length() <= 0) {
             status.setLoai("default");
         }
@@ -75,14 +79,15 @@ public class PresenterEditPost {
                     if (mUri != null) {
                         if (uploadTask != null && uploadTask.isInProgress()) {
                             iEditPost.toast("Upload in progress");
-                        } else {
+                        }
+                        else {
                             uploadImage(idPost, mUri);
                         }
                     }
                     iEditPost.toast("Post");
                     iEditPost.intentPost();
                 } else {
-                    iEditPost.toast("You can't create post");
+                    iEditPost.toast("You can't edit post");
                     iEditPost.intentPost();
                 }
             }
@@ -90,9 +95,6 @@ public class PresenterEditPost {
     }
 
     private void uploadImage(String idPost, Uri mUri) {
-//        final ProgressDialog pd = new ProgressDialog(context);
-//        pd.setMessage("Uploading");
-//        pd.show();
         if (mUri != null) {
             final StorageReference storageReference1 = storage.child(System.currentTimeMillis() + "." + getFileExtention(mUri));
             uploadTask = storageReference1.putFile(mUri);
@@ -116,17 +118,14 @@ public class PresenterEditPost {
                         HashMap<String, Object> map = new HashMap<>();
                         map.put("img", urim);
                         reference.child("Tus").child(idPost).updateChildren(map);
-//                        pd.dismiss();
                     } else {
                         iEditPost.toast("Failed");
-//                        pd.dismiss();
                     }
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     iEditPost.toast(e.getMessage());
-//                    pd.dismiss();
                 }
             });
         } else {

@@ -1,25 +1,22 @@
 package com.example.petcare.view.fragment;
 
 import static android.app.Activity.RESULT_OK;
-import static androidx.core.content.ContextCompat.checkSelfPermission;
 
-import android.Manifest;
 import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.MimeTypeMap;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -41,11 +38,6 @@ import com.example.petcare.model.User;
 import com.example.petcare.adapter.AdapterTus;
 import com.example.petcare.presenter.IHomeFragment;
 import com.example.petcare.presenter.PresenterHomeFragment;
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -53,18 +45,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.StorageTask;
-import com.google.firebase.storage.UploadTask;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -72,7 +56,7 @@ public class HomeFragment extends Fragment implements IHomeFragment {
 
     View view;
     RecyclerView frmHomeLv;
-    LinearLayout frmHomeBtnFloat;
+    LinearLayout btnAdd;
     RelativeLayout rc;
     CircleImageView homeImgAvt;
     TextView username;
@@ -99,9 +83,9 @@ public class HomeFragment extends Fragment implements IHomeFragment {
                              @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_home, container, false);
         frmHomeLv = view.findViewById(R.id.frmHomeLv);
-        frmHomeBtnFloat = view.findViewById(R.id.frmHomeBtnFloat);
-        username=view.findViewById(R.id.homeTvUsername);
-        homeImgAvt=view.findViewById(R.id.homeImgAvt);
+        btnAdd = view.findViewById(R.id.frmHomeBtnFloat);
+        username = view.findViewById(R.id.homeTvUsername);
+        homeImgAvt = view.findViewById(R.id.homeImgAvt);
         presenterHomeFragment = new PresenterHomeFragment(this, getContext());
 
         frmHomeLv.setHasFixedSize(true);
@@ -111,18 +95,26 @@ public class HomeFragment extends Fragment implements IHomeFragment {
         frmHomeLv.setNestedScrollingEnabled(false);
         frmHomeLv.setLayoutManager(linearLayoutManager);
 
-        firebaseUser=FirebaseAuth.getInstance().getCurrentUser();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         hienThi();
 
         presenterHomeFragment.showTus();
 
-        frmHomeBtnFloat.setOnClickListener(new View.OnClickListener() {
+        btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog = new Dialog(getContext());
                 dialog.setTitle("Create Post");
                 dialog.setCancelable(false);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.dialog_dang_bai);
+                Window window=dialog.getWindow();
+                if(window==null){
+                    return;
+                }
+                window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.getWindow().setLayout((int) (getActivity().getWindow().peekDecorView().getWidth() * 0.9),
+                        WindowManager.LayoutParams.WRAP_CONTENT);
                 dialog.show();
 
                 TextView username = dialog.findViewById(R.id.bdUsername);
@@ -132,7 +124,7 @@ public class HomeFragment extends Fragment implements IHomeFragment {
                 ImageView chon = dialog.findViewById(R.id.dbChonImg);
                 ImageView btnClose = dialog.findViewById(R.id.bdBtnClose);
                 ImageView btnCloseanh = dialog.findViewById(R.id.closeanh);
-                rc=dialog.findViewById(R.id.anhHT);
+                rc = dialog.findViewById(R.id.anhHT);
                 imgHien = dialog.findViewById(R.id.bdimgHien);
                 Button btnPost = dialog.findViewById(R.id.bdBtnPost);
 
@@ -159,8 +151,8 @@ public class HomeFragment extends Fragment implements IHomeFragment {
                 btnCloseanh.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mUri=null;
-                        flag=false;
+                        mUri = null;
+                        flag = false;
                         rc.setVisibility(View.GONE);
                     }
                 });
@@ -183,8 +175,8 @@ public class HomeFragment extends Fragment implements IHomeFragment {
                     @Override
                     public void onClick(View v) {
                         dialog.cancel();
-                        mUri=null;
-                        flag=false;
+                        mUri = null;
+                        flag = false;
                     }
                 });
 
@@ -225,15 +217,15 @@ public class HomeFragment extends Fragment implements IHomeFragment {
 
     }
 
-    private void hienThi(){
-        reference=FirebaseDatabase.getInstance().getReference();
+    private void hienThi() {
+        reference = FirebaseDatabase.getInstance().getReference();
         reference.child("users").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                User user=snapshot.getValue(User.class);
+                User user = snapshot.getValue(User.class);
                 assert user != null;
                 username.setText(user.getUsername());
-                if(isAdded())
+                if (isAdded())
                     Glide.with(getContext()).load(user.getAvt()).error(R.drawable.users).into(homeImgAvt);
             }
 
@@ -243,6 +235,7 @@ public class HomeFragment extends Fragment implements IHomeFragment {
             }
         });
     }
+
     @Override
     public void openGallery(int code) {
         Intent intent = new Intent(Intent.ACTION_PICK);
@@ -259,7 +252,7 @@ public class HomeFragment extends Fragment implements IHomeFragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode==MY_REQUEST_CODE3) {
+        if (requestCode == MY_REQUEST_CODE3) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 openGallery(MY_REQUEST_CODE3);
             }
@@ -278,10 +271,10 @@ public class HomeFragment extends Fragment implements IHomeFragment {
 
     @Override
     public void setAdapterTus(List<Status> statusList) {
-        if (getActivity() != null ) {
-            if(getActivity().isDestroyed() ) {
+        if (getActivity() != null) {
+            if (getActivity().isDestroyed()) {
                 adapterTus = new AdapterTus(statusList, getActivity().getApplicationContext());
-            }else {
+            } else {
                 adapterTus = new AdapterTus(statusList, getContext());
             }
         } else {

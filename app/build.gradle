@@ -56,4 +56,6 @@ dependencies {
     dependencies{
         implementation 'me.relex:circleindicator:1.2.2@aar'
     }
+    implementation 'com.google.android.gms:play-services-maps:17.0.1'
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
 }

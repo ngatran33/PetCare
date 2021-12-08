@@ -24,10 +24,10 @@
         <entry key="..\:/HOCTAP/JAVA/JAVAANDROID/PetCare/app/src/main/res/layout/activity_maps.xml" value="0.15217391304347827" />
         <entry key="..\:/HOCTAP/JAVA/JAVAANDROID/PetCare/app/src/main/res/layout/activity_message.xml" value="0.16" />
         <entry key="..\:/HOCTAP/JAVA/JAVAANDROID/PetCare/app/src/main/res/layout/activity_post.xml" value="0.176" />
-        <entry key="..\:/HOCTAP/JAVA/JAVAANDROID/PetCare/app/src/main/res/layout/activity_search.xml" value="0.2" />
+        <entry key="..\:/HOCTAP/JAVA/JAVAANDROID/PetCare/app/src/main/res/layout/activity_search.xml" value="0.1" />
         <entry key="..\:/HOCTAP/JAVA/JAVAANDROID/PetCare/app/src/main/res/layout/activity_setting.xml" value="0.25416666666666665" />
         <entry key="..\:/HOCTAP/JAVA/JAVAANDROID/PetCare/app/src/main/res/layout/activity_sign_in.xml" value="0.25970873786407767" />
-        <entry key="..\:/HOCTAP/JAVA/JAVAANDROID/PetCare/app/src/main/res/layout/activity_sign_up.xml" value="0.2" />
+        <entry key="..\:/HOCTAP/JAVA/JAVAANDROID/PetCare/app/src/main/res/layout/activity_sign_up.xml" value="0.264" />
         <entry key="..\:/HOCTAP/JAVA/JAVAANDROID/PetCare/app/src/main/res/layout/activity_start_app.xml" value="0.1" />
         <entry key="..\:/HOCTAP/JAVA/JAVAANDROID/PetCare/app/src/main/res/layout/bgr_right.xml" value="0.1" />
         <entry key="..\:/HOCTAP/JAVA/JAVAANDROID/PetCare/app/src/main/res/layout/change_email.xml" value="0.2" />
@@ -44,7 +44,7 @@
         <entry key="..\:/HOCTAP/JAVA/JAVAANDROID/PetCare/app/src/main/res/layout/edit_post.xml" value="0.25416666666666665" />
         <entry key="..\:/HOCTAP/JAVA/JAVAANDROID/PetCare/app/src/main/res/layout/fragment_adopt.xml" value="0.1" />
         <entry key="..\:/HOCTAP/JAVA/JAVAANDROID/PetCare/app/src/main/res/layout/fragment_change.xml" value="0.12335359675785208" />
-        <entry key="..\:/HOCTAP/JAVA/JAVAANDROID/PetCare/app/src/main/res/layout/fragment_chat.xml" value="0.536" />
+        <entry key="..\:/HOCTAP/JAVA/JAVAANDROID/PetCare/app/src/main/res/layout/fragment_chat.xml" value="0.2" />
         <entry key="..\:/HOCTAP/JAVA/JAVAANDROID/PetCare/app/src/main/res/layout/fragment_find_pet.xml" value="0.25416666666666665" />
         <entry key="..\:/HOCTAP/JAVA/JAVAANDROID/PetCare/app/src/main/res/layout/fragment_home.xml" value="0.1556420233463035" />
         <entry key="..\:/HOCTAP/JAVA/JAVAANDROID/PetCare/app/src/main/res/layout/fragment_maps.xml" value="0.12360688956433637" />

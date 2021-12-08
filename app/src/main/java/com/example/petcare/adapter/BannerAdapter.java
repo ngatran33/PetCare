@@ -56,7 +56,6 @@ public class BannerAdapter extends PagerAdapter {
         sdt.setText(thuYList.get(position).getSdt());
         Glide.with(context.getApplicationContext()).load(thuYList.get(position).getAnh()).into(anh);
         container.addView(view);
-        //        Picasso.with(context).load().into(imganh);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

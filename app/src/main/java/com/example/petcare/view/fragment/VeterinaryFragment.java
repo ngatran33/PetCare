@@ -29,21 +29,22 @@ public class VeterinaryFragment extends Fragment {
     RecyclerView recyclerView;
     List<ThuY> thuYList;
     AdapterThuY adapterThuY;
-    DatabaseReference reference= FirebaseDatabase.getInstance().getReference();
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        view=inflater.inflate(R.layout.fragment_find_pet, container, false);
+        view = inflater.inflate(R.layout.fragment_find_pet, container, false);
 
-        recyclerView=view.findViewById(R.id.recyclerViewThuY);
+        recyclerView = view.findViewById(R.id.recyclerViewThuY);
         recyclerView.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager= new LinearLayoutManager(getContext());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setFocusable(false);
         recyclerView.setNestedScrollingEnabled(false);
-        thuYList =new ArrayList<>();
+        thuYList = new ArrayList<>();
         hienThi();
         return view;
     }
@@ -53,11 +54,11 @@ public class VeterinaryFragment extends Fragment {
         reference.child("veterinarys").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot dataSnapshot: snapshot.getChildren()){
-                    ThuY quangCao=dataSnapshot.getValue(ThuY.class);
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    ThuY quangCao = dataSnapshot.getValue(ThuY.class);
                     thuYList.add(quangCao);
                 }
-                adapterThuY =new AdapterThuY(thuYList, getActivity());
+                adapterThuY = new AdapterThuY(thuYList, getActivity());
                 recyclerView.setAdapter(adapterThuY);
             }
 

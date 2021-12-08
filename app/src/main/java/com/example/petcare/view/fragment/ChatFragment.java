@@ -1,13 +1,16 @@
 package com.example.petcare.view.fragment;
 
 import android.app.Dialog;
-import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -23,8 +26,6 @@ import com.example.petcare.presenter.IChat;
 import com.example.petcare.presenter.PresenterChat;
 import com.example.petcare.adapter.UserAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -34,9 +35,7 @@ public class ChatFragment extends Fragment implements IChat {
     RecyclerView recyclerViewEmail;
     EditText etSearch;
     FloatingActionButton btnEmail;
-
     PresenterChat presenterChat;
-    UserAdapter userAdapter;
 
     @Nullable
     @Override
@@ -54,7 +53,6 @@ public class ChatFragment extends Fragment implements IChat {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
 
 
-
         btnEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,6 +60,13 @@ public class ChatFragment extends Fragment implements IChat {
                 dialog.setTitle("User");
                 dialog.setCancelable(false);
                 dialog.setContentView(R.layout.user_list);
+                Window window=dialog.getWindow();
+                if(window==null){
+                    return;
+                }
+                window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.getWindow().setLayout((int) (getActivity().getWindow().peekDecorView().getWidth() * 0.9),
+                        WindowManager.LayoutParams.WRAP_CONTENT);
                 dialog.show();
 
                 recyclerViewEmail = dialog.findViewById(R.id.recyclerViewEmail);
@@ -102,7 +107,6 @@ public class ChatFragment extends Fragment implements IChat {
         presenterChat.readUsersId();
         return view;
     }
-
 
 
     @Override

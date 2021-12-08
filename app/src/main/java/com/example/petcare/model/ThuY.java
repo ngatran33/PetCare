@@ -10,11 +10,30 @@ public class ThuY {
     String sdt;
     String thoigian;
     String website;
+    double latitude;
+    double longitude;
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
 
     public ThuY() {
     }
 
-    public ThuY(String anh, String diaChi, String fanpage, String mota, String name, String sdt, String thoigian, String website,String id) {
+    public ThuY(String anh, String diaChi, String fanpage, String mota, String name, String sdt, String thoigian, String website,String id,
+                double latitude,double longitude) {
         this.anh = anh;
         this.diaChi = diaChi;
         this.fanpage = fanpage;
@@ -24,6 +43,9 @@ public class ThuY {
         this.thoigian = thoigian;
         this.website = website;
         this.id = id;
+        this.latitude = latitude;
+        this.longitude = longitude;
+
     }
 
     public String getAnh() {

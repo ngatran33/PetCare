@@ -37,7 +37,6 @@ public class PresenterHomeActivity {
     }
     public void ActionMenu(){
         List<String> list=new ArrayList<>();
-        list.add("Change email");
         list.add("Change password");
         list.add("Help");
         list.add("Log Out");

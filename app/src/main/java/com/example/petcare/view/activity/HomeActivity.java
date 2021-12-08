@@ -10,10 +10,13 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,7 +28,6 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.bumptech.glide.Glide;
 import com.example.petcare.R;
-import com.example.petcare.adapter.Util;
 import com.example.petcare.databinding.ActivityHomeBinding;
 import com.example.petcare.model.User;
 import com.example.petcare.adapter.AdapterMenu;
@@ -33,9 +35,6 @@ import com.example.petcare.presenter.IHomeActivity;
 import com.example.petcare.presenter.NetworkChangeListener;
 import com.example.petcare.presenter.PresenterHomeActivity;
 import com.example.petcare.adapter.ViewPagerAdapter;
-import com.example.petcare.presenter.PresenterHomeFragment;
-import com.example.petcare.view.fragment.ChatFragment;
-import com.example.petcare.view.fragment.HomeFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -48,8 +47,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class HomeActivity extends AppCompatActivity implements IHomeActivity {
 
@@ -59,7 +56,7 @@ public class HomeActivity extends AppCompatActivity implements IHomeActivity {
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
     PresenterHomeActivity presenterHomeActivity;
     String userId;
-    NetworkChangeListener networkChangeListener=new NetworkChangeListener();
+    NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
 
     @Override
@@ -78,9 +75,6 @@ public class HomeActivity extends AppCompatActivity implements IHomeActivity {
                 danhMuc(position);
             }
         });
-//        if(!Util.isNetworkAvailable(this)){// check internet
-//            Toast.makeText(this,"Network disconnected", Toast.LENGTH_LONG).show();
-//        }
 
         hienThi();
         binding.imgAvt.setOnClickListener(new View.OnClickListener() {
@@ -91,22 +85,6 @@ public class HomeActivity extends AppCompatActivity implements IHomeActivity {
                 binding.drawerLayout.closeDrawer(GravityCompat.START);
             }
         });
-    }
-
-    private void danhMuc(int position) {
-        if (position == 2) {
-            help();
-        }
-        if (position == 0) {
-            changeEmail();
-        }
-        if (position == 1) {
-            changePass();
-        }
-        if (position == 3) {
-            startActivity(new Intent(getBaseContext(), StartAppActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-            FirebaseAuth.getInstance().signOut();
-        }
     }
 
 
@@ -202,16 +180,50 @@ public class HomeActivity extends AppCompatActivity implements IHomeActivity {
     }
 
 
+    @Override
+    protected void onStart() {
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeListener, filter);
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        unregisterReceiver(networkChangeListener);
+        super.onStop();
+    }
+
+
+    private void danhMuc(int position) {
+        if (position == 1) {
+            help();
+        }
+        if (position == 0) {
+            changePass();
+        }
+        if (position == 2) {
+            startActivity(new Intent(getBaseContext(), StartAppActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            FirebaseAuth.getInstance().signOut();
+        }
+    }
+
+
+
     private void help() {
         Dialog dialog = new Dialog(HomeActivity.this);
         dialog.setTitle("Help");
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.help);
+        Window window=dialog.getWindow();
+        if(window==null){
+            return;
+        }
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setLayout((int) (HomeActivity.this.getWindow().peekDecorView().getWidth() * 0.9), WindowManager.LayoutParams.WRAP_CONTENT);
         dialog.show();
 
         ImageView close = dialog.findViewById(R.id.helpBtnClose);
         ImageView search = dialog.findViewById(R.id.helpSearch);
-        EditText etSearch = dialog.findViewById(R.id.helpTvSearch);
         TextView cau1 = dialog.findViewById(R.id.helpcau1);
         TextView cau2 = dialog.findViewById(R.id.helpcau2);
         TextView cau3 = dialog.findViewById(R.id.helpcau3);
@@ -248,56 +260,10 @@ public class HomeActivity extends AppCompatActivity implements IHomeActivity {
         });
     }
 
-    private void changeEmail() {
-        Dialog dialog = new Dialog(HomeActivity.this);
-        dialog.setTitle("Help");
-        dialog.setCancelable(false);
-        dialog.setContentView(R.layout.change_email);
-        dialog.show();
-
-        EditText email = dialog.findViewById(R.id.changeEmail);
-        ImageView close = dialog.findViewById(R.id.emailBtnClose);
-        Button save = dialog.findViewById(R.id.btnSave);
-
-        email.setText(firebaseUser.getEmail());
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateEmail(email.getText().toString());
-                dialog.cancel();
-            }
-        });
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.cancel();
-            }
-        });
-    }
-
-    private void updateEmail(String s) {
-        final ProgressDialog pd = new ProgressDialog(HomeActivity.this);
-        pd.setMessage("Uploading");
-        pd.show();
-        firebaseUser.updateEmail(s).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    pd.dismiss();
-                    Toast.makeText(getBaseContext(), "User email address updated.", Toast.LENGTH_LONG).show();
-                    hienThi();
-                } else {
-                    pd.dismiss();
-                    Toast.makeText(getBaseContext(), "User email address don't updated.", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-    }
-
 
     private void changePass() {
         Dialog dialog = new Dialog(HomeActivity.this);
-        dialog.setTitle("Help");
+        dialog.setTitle("Change pass");
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.custom_change_pass);
         dialog.show();
@@ -331,41 +297,27 @@ public class HomeActivity extends AppCompatActivity implements IHomeActivity {
         final ProgressDialog pd = new ProgressDialog(HomeActivity.this);
         pd.setMessage("Uploading");
         pd.show();
-        String email=firebaseUser.getEmail();
-        AuthCredential credential= EmailAuthProvider.getCredential(email, oldpass);
+        String email = firebaseUser.getEmail();
+        AuthCredential credential = EmailAuthProvider.getCredential(email, oldpass);
         firebaseUser.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
                     firebaseUser.updatePassword(newpass).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()){
+                            if (task.isSuccessful()) {
                                 Toast.makeText(getBaseContext(), "Password updated", Toast.LENGTH_LONG).show();
-                            }
-                            else {
+                            } else {
                                 Toast.makeText(getBaseContext(), "Failed", Toast.LENGTH_LONG).show();
                             }
                         }
                     });
-                }else{
+                } else {
                     Toast.makeText(getBaseContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });
         pd.cancel();
-    }
-
-    @Override
-    protected void onStart() {
-        IntentFilter filter=new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        registerReceiver(networkChangeListener, filter);
-        super.onStart();
-    }
-
-    @Override
-    protected void onStop() {
-        unregisterReceiver(networkChangeListener);
-        super.onStop();
     }
 }

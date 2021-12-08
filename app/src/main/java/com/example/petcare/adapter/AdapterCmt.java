@@ -168,8 +168,8 @@ public class AdapterCmt extends RecyclerView.Adapter<AdapterCmt.Viewhoder> {
     private void deleteCmt(String id, String idUser) {
         if (userFb.getUid().equals(idUser) || userFb.getUid().equals(idUserPost)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle("Are you sure you want to delete this comment?");
-            builder.setMessage("");
+            builder.setTitle("Notification");
+            builder.setMessage("Are you sure you want to delete this comment?");
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -29,8 +30,7 @@ import com.example.petcare.model.User;
 import com.example.petcare.adapter.AdapterTus;
 import com.example.petcare.presenter.IProfile;
 import com.example.petcare.presenter.PresenterProfile;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.example.petcare.view.activity.HomeActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -43,7 +43,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
-import java.util.HashMap;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -62,8 +61,8 @@ public class ProfileFragment extends Fragment implements IProfile {
 
     PresenterProfile obj;
     StorageReference storageReference;
-    private static final int MY_REQUEST_CODE =10 ;
-    private static final int MY_REQUEST_CODE1 =11 ;
+    private static final int MY_REQUEST_CODE = 10;
+    private static final int MY_REQUEST_CODE1 = 11;
     Uri mUri;
     StorageTask<UploadTask.TaskSnapshot> uploadTask;
 
@@ -73,32 +72,32 @@ public class ProfileFragment extends Fragment implements IProfile {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        view=inflater.inflate(R.layout.fragment_profile, container, false);
+        view = inflater.inflate(R.layout.fragment_profile, container, false);
         anhxa(view);
-        obj=new PresenterProfile(this, getContext());
+        obj = new PresenterProfile(this, getContext());
 
         userFire = FirebaseAuth.getInstance().getCurrentUser();
-        databaseReference= FirebaseDatabase.getInstance().getReference("users").child(userFire.getUid());
-        storageReference=FirebaseStorage.getInstance().getReference("images");
+        databaseReference = FirebaseDatabase.getInstance().getReference("users").child(userFire.getUid());
+        storageReference = FirebaseStorage.getInstance().getReference("images");
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                User user=snapshot.getValue(User.class);
+                User user = snapshot.getValue(User.class);
                 assert user != null;
                 tvUser.setText(user.getUsername());
-                if(user.getAvt().equals("default")){
+                if (user.getAvt().equals("default")) {
                     imgAvt.setImageResource(R.drawable.users);
-                }else{
-                    if(getActivity()!=null)
+                } else {
+                    if (getActivity() != null)
                         Glide.with(getActivity().getApplicationContext()).load(user.getAvt()).into(imgAvt);
                 }
 
-                if(user.getBgr().equals("default")){
+                if (user.getBgr().equals("default")) {
                     imgBgr.setImageResource(R.drawable.meomeo);
-                }else{
-                    if(getActivity()!=null)
-                    Glide.with(getActivity().getApplicationContext()).load(user.getBgr()).into(imgBgr);
+                } else {
+                    if (getActivity() != null)
+                        Glide.with(getActivity().getApplicationContext()).load(user.getBgr()).into(imgBgr);
                 }
 
             }
@@ -125,27 +124,27 @@ public class ProfileFragment extends Fragment implements IProfile {
         });
 
 
-
         tvUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Dialog dialog=new Dialog(getContext());
+                Dialog dialog = new Dialog(getContext());
                 dialog.setTitle("Change Username");
                 dialog.setCancelable(false);
                 dialog.setContentView(R.layout.customdialog);
+                dialog.getWindow().setLayout((int) (getActivity().getWindow().peekDecorView().getWidth() * 0.9), WindowManager.LayoutParams.WRAP_CONTENT);
                 dialog.show();
-                EditText cusEtUser=dialog.findViewById(R.id.cusEtUser);
-                Button cusBtnUpdate=dialog.findViewById(R.id.cusBtnUpdate);
-                Button cusBtnHuy=dialog.findViewById(R.id.cusBtnHuy);
+                EditText cusEtUser = dialog.findViewById(R.id.cusEtUser);
+                Button cusBtnUpdate = dialog.findViewById(R.id.cusBtnUpdate);
+                Button cusBtnHuy = dialog.findViewById(R.id.cusBtnHuy);
 
-                String userold= (String) tvUser.getText();
+                String userold = (String) tvUser.getText();
                 cusEtUser.setText(userold);
 
                 cusBtnUpdate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String userChange=cusEtUser.getText().toString().trim();
-                        if(obj.change(userChange, userold)){
+                        String userChange = cusEtUser.getText().toString().trim();
+                        if (obj.change(userChange, userold)) {
                             dialog.cancel();
                         }
                     }
@@ -159,16 +158,16 @@ public class ProfileFragment extends Fragment implements IProfile {
             }
         });
 
-        return    view;
+        return view;
     }
 
     private void anhxa(View view) {
-        imgAvt =view.findViewById(R.id.frmPrImgavt);
-        tvUser =view.findViewById(R.id.frmPrTvuser);
-        imgBgr=view.findViewById(R.id.prfImgBgr);
-        prfPost=view.findViewById(R.id.prfPost);
+        imgAvt = view.findViewById(R.id.frmPrImgavt);
+        tvUser = view.findViewById(R.id.frmPrTvuser);
+        imgBgr = view.findViewById(R.id.prfImgBgr);
+        prfPost = view.findViewById(R.id.prfPost);
         prfPost.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext(),RecyclerView.VERTICAL, false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         linearLayoutManager.setStackFromEnd(true);
         prfPost.setFocusable(false);
         prfPost.setNestedScrollingEnabled(false);
@@ -177,22 +176,20 @@ public class ProfileFragment extends Fragment implements IProfile {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(requestCode==MY_REQUEST_CODE && resultCode==RESULT_OK && data!= null && data.getData()!=null){
-            mUri =data.getData();
-            if(uploadTask != null && uploadTask.isInProgress()){
-                Toast.makeText(getContext(),"Upload in progress",Toast.LENGTH_LONG).show();
-            }
-            else {
-                obj.uploadImage(mUri, storageReference,uploadTask,"avt");
+        if (requestCode == MY_REQUEST_CODE && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            mUri = data.getData();
+            if (uploadTask != null && uploadTask.isInProgress()) {
+                Toast.makeText(getContext(), "Upload in progress", Toast.LENGTH_LONG).show();
+            } else {
+                obj.uploadImage(mUri, storageReference, uploadTask, "avt");
             }
         }
-        if(requestCode==MY_REQUEST_CODE1 && resultCode==RESULT_OK && data!= null && data.getData()!=null){
-            mUri =data.getData();
-            if(uploadTask != null && uploadTask.isInProgress()){
-                Toast.makeText(getContext(),"Upload in progress",Toast.LENGTH_LONG).show();
-            }
-            else {
-                obj.uploadImage(mUri, storageReference,uploadTask,"bgr");
+        if (requestCode == MY_REQUEST_CODE1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            mUri = data.getData();
+            if (uploadTask != null && uploadTask.isInProgress()) {
+                Toast.makeText(getContext(), "Upload in progress", Toast.LENGTH_LONG).show();
+            } else {
+                obj.uploadImage(mUri, storageReference, uploadTask, "bgr");
             }
         }
     }
@@ -200,16 +197,16 @@ public class ProfileFragment extends Fragment implements IProfile {
 
     @Override
     public void onMessage(String s) {
-        Toast.makeText(getContext(), s,Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), s, Toast.LENGTH_LONG).show();
     }
 
 
     @Override
     public void openGallery(int code) {
-        Intent intent=new Intent();
+        Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent,code);
+        startActivityForResult(intent, code);
     }
 
     @Override
@@ -220,12 +217,12 @@ public class ProfileFragment extends Fragment implements IProfile {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode==MY_REQUEST_CODE ) {
+        if (requestCode == MY_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 openGallery(MY_REQUEST_CODE);
             }
         }
-        if(requestCode==MY_REQUEST_CODE1){
+        if (requestCode == MY_REQUEST_CODE1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 openGallery(MY_REQUEST_CODE1);
             }
@@ -234,12 +231,12 @@ public class ProfileFragment extends Fragment implements IProfile {
 
     @Override
     public void setAdapterPrf(List<Status> statusList) {
-        adapterTus=new AdapterTus(statusList, getContext());
+        adapterTus = new AdapterTus(statusList, getContext());
         prfPost.setAdapter(adapterTus);
     }
 
     @Override
     public void toast(String s) {
-        Toast.makeText(getContext(), s,Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), s, Toast.LENGTH_LONG).show();
     }
 }
